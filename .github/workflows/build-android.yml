@@ -94,6 +94,7 @@ jobs:
             -DWITH_OPENCLAMDFFT=OFF \
             -DWITH_OPENCLAMDBLAS=OFF \
             -DWITH_OPENGL=OFF \
+            -DWITH_OPENEXR=OFF \
             -DWITH_TBB=OFF \
             -DWITH_V4L=OFF \
             -DWITH_IPP=OFF \
@@ -108,6 +109,7 @@ jobs:
           cat CMakeCache.txt | grep -i opencl
           cat CMakeCache.txt | grep -i examples
           cat CMakeCache.txt | grep -i java
+          cat CMakeCache.txt | grep -i openexr
 
       - name: Build with Ninja
         working-directory: build-${{ matrix.abi }}
