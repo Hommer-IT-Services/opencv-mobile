@@ -29,8 +29,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ninja-build cmake
-          ninja --version  # Verify Ninja installation
-          cmake --version  # Verify CMake installation
+          ninja --version
+          cmake --version
 
       - name: Download Android NDK
         run: |
@@ -52,6 +52,10 @@ jobs:
       - name: Create build directory
         run: mkdir -p build-${{ matrix.abi }}
 
+      - name: Clear build directory
+        working-directory: build-${{ matrix.abi }}
+        run: rm -rf *
+
       - name: Configure CMake for ${{ matrix.abi }}
         working-directory: build-${{ matrix.abi }}
         run: |
@@ -71,12 +75,19 @@ jobs:
             -DOPENCV_EXTRA_FLAGS="-mno-outline-atomics" \
             -DOPENCV_SKIP_ANDROID=ON \
             -DWITH_OPENCL=OFF \
+            -DWITH_OPENCL_SVM=OFF \
+            -DWITH_OPENCLAMDFFT=OFF \
+            -DWITH_OPENCLAMDBLAS=OFF \
             -DBUILD_opencv_calib3d=ON \
             -DBUILD_opencv_core=ON \
             -DBUILD_opencv_imgproc=ON \
             -DBUILD_opencv_features2d=ON \
             -DBUILD_opencv_flann=ON \
             ../opencv
+
+      - name: Debug CMake Configuration
+        working-directory: build-${{ matrix.abi }}
+        run: cat CMakeCache.txt | grep -i opencl
 
       - name: Build with Ninja
         working-directory: build-${{ matrix.abi }}
