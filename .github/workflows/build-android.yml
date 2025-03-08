@@ -48,6 +48,7 @@ jobs:
         working-directory: opencv
         run: |
           patch -p1 -i ../patches/opencv-4.10.0-no-zlib.patch
+          patch -p1 -i ../patches/disable_opengl_in_precomp.patch
 
       - name: Create and clear build directory
         run: |
