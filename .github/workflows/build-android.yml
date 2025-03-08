@@ -101,12 +101,14 @@ jobs:
             -DWITH_EIGEN=OFF \
             -DOPENCV_DISABLE_FILESYSTEM_SUPPORT=ON \
             -DOPENCV_SKIP_ANDROID=ON \
+            -DOPENCV_ENABLE_OPENGL=OFF \
             ../opencv
 
       - name: Debug CMake Configuration
         working-directory: build-${{ matrix.abi }}
         run: |
           cat CMakeCache.txt | grep -i opencl
+          cat CMakeCache.txt | grep -i opengl
           cat CMakeCache.txt | grep -i examples
           cat CMakeCache.txt | grep -i java
           cat CMakeCache.txt | grep -i openexr
