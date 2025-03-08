@@ -76,6 +76,7 @@ jobs:
             -DBUILD_opencv_gapi=OFF \
             -DBUILD_opencv_highgui=OFF \
             -DBUILD_opencv_java=OFF \
+            -DBUILD_opencv_java_bindings=OFF \
             -DBUILD_opencv_js=OFF \
             -DBUILD_opencv_ml=OFF \
             -DBUILD_opencv_objdetect=OFF \
@@ -86,6 +87,8 @@ jobs:
             -DBUILD_opencv_video=OFF \
             -DBUILD_opencv_videoio=OFF \
             -DBUILD_opencv_world=OFF \
+            -DBUILD_EXAMPLES=OFF \
+            -DBUILD_ANDROID_EXAMPLES=OFF \
             -DWITH_OPENCL=OFF \
             -DWITH_OPENCL_SVM=OFF \
             -DWITH_OPENCLAMDFFT=OFF \
@@ -103,7 +106,8 @@ jobs:
         working-directory: build-${{ matrix.abi }}
         run: |
           cat CMakeCache.txt | grep -i opencl
-          cat CMakeCache.txt | grep -i opencv_core
+          cat CMakeCache.txt | grep -i examples
+          cat CMakeCache.txt | grep -i java
 
       - name: Build with Ninja
         working-directory: build-${{ matrix.abi }}
