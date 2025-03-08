@@ -34,9 +34,9 @@ jobs:
 
       - name: Download Android NDK
         run: |
-          wget -q https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
-          unzip -q android-ndk-r25c-linux.zip -d $HOME/ndk
-          echo "ANDROID_NDK=$HOME/ndk/android-ndk-r25c" >> $GITHUB_ENV
+          wget -q https://dl.google.com/android/repository/android-ndk-r21d-linux-x86_64.zip
+          unzip -q android-ndk-r21d-linux-x86_64.zip -d $HOME/ndk
+          echo "ANDROID_NDK=$HOME/ndk/android-ndk-r21d" >> $GITHUB_ENV
 
       - name: Download OpenCV source
         run: |
@@ -49,12 +49,10 @@ jobs:
         run: |
           patch -p1 -i ../patches/opencv-4.10.0-no-zlib.patch
 
-      - name: Create build directory
-        run: mkdir -p build-${{ matrix.abi }}
-
-      - name: Clear build directory
-        working-directory: build-${{ matrix.abi }}
-        run: rm -rf *
+      - name: Create and clear build directory
+        run: |
+          rm -rf build-${{ matrix.abi }}
+          mkdir -p build-${{ matrix.abi }}
 
       - name: Configure CMake for ${{ matrix.abi }}
         working-directory: build-${{ matrix.abi }}
@@ -69,25 +67,43 @@ jobs:
             -DANDROID_ARM_NEON=ON \
             -DCMAKE_INSTALL_PREFIX=install \
             -DCMAKE_BUILD_TYPE=Release \
-            $(cat ../opencv4_cmake_options.txt) \
-            -DBUILD_opencv_world=OFF \
-            -DOPENCV_DISABLE_FILESYSTEM_SUPPORT=ON \
-            -DOPENCV_EXTRA_FLAGS="-mno-outline-atomics" \
-            -DOPENCV_SKIP_ANDROID=ON \
-            -DWITH_OPENCL=OFF \
-            -DWITH_OPENCL_SVM=OFF \
-            -DWITH_OPENCLAMDFFT=OFF \
-            -DWITH_OPENCLAMDBLAS=OFF \
             -DBUILD_opencv_calib3d=ON \
             -DBUILD_opencv_core=ON \
             -DBUILD_opencv_imgproc=ON \
             -DBUILD_opencv_features2d=ON \
             -DBUILD_opencv_flann=ON \
+            -DBUILD_opencv_dnn=OFF \
+            -DBUILD_opencv_gapi=OFF \
+            -DBUILD_opencv_highgui=OFF \
+            -DBUILD_opencv_java=OFF \
+            -DBUILD_opencv_js=OFF \
+            -DBUILD_opencv_ml=OFF \
+            -DBUILD_opencv_objdetect=OFF \
+            -DBUILD_opencv_photo=OFF \
+            -DBUILD_opencv_python=OFF \
+            -DBUILD_opencv_stitching=OFF \
+            -DBUILD_opencv_ts=OFF \
+            -DBUILD_opencv_video=OFF \
+            -DBUILD_opencv_videoio=OFF \
+            -DBUILD_opencv_world=OFF \
+            -DWITH_OPENCL=OFF \
+            -DWITH_OPENCL_SVM=OFF \
+            -DWITH_OPENCLAMDFFT=OFF \
+            -DWITH_OPENCLAMDBLAS=OFF \
+            -DWITH_OPENGL=OFF \
+            -DWITH_TBB=OFF \
+            -DWITH_V4L=OFF \
+            -DWITH_IPP=OFF \
+            -DWITH_EIGEN=OFF \
+            -DOPENCV_DISABLE_FILESYSTEM_SUPPORT=ON \
+            -DOPENCV_SKIP_ANDROID=ON \
             ../opencv
 
       - name: Debug CMake Configuration
         working-directory: build-${{ matrix.abi }}
-        run: cat CMakeCache.txt | grep -i opencl
+        run: |
+          cat CMakeCache.txt | grep -i opencl
+          cat CMakeCache.txt | grep -i opencv_core
 
       - name: Build with Ninja
         working-directory: build-${{ matrix.abi }}
