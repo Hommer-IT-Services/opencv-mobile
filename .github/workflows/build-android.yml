@@ -26,7 +26,11 @@ jobs:
           distribution: 'temurin'
 
       - name: Install Ninja and CMake
-        run: sudo apt-get update && sudo apt-get install -y ninja-build cmake
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build cmake
+          ninja --version  # Verify Ninja installation
+          cmake --version  # Verify CMake installation
 
       - name: Download Android NDK
         run: |
@@ -50,8 +54,6 @@ jobs:
 
       - name: Configure CMake for ${{ matrix.abi }}
         working-directory: build-${{ matrix.abi }}
-        env:
-          ANDROID_ARM_NEON: ${{ matrix.abi == 'armeabi-v7a' && 'ON' || 'OFF' }}
         run: |
           cmake \
             -G "Ninja" \
@@ -60,7 +62,7 @@ jobs:
             -DANDROID_PLATFORM=android-21 \
             -DANDROID_USE_LEGACY_TOOLCHAIN_FILE=False \
             -DANDROID_CPP_FEATURES="no-rtti no-exceptions" \
-            -DANDROID_ARM_NEON=$ANDROID_ARM_NEON \
+            -DANDROID_ARM_NEON=ON \
             -DCMAKE_INSTALL_PREFIX=install \
             -DCMAKE_BUILD_TYPE=Release \
             $(cat ../opencv4_cmake_options.txt) \
