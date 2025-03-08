@@ -114,7 +114,7 @@ jobs:
           cat CMakeCache.txt | grep -i openexr
 
       - name: Apply patches Again
-        working-directory: opencv
+        working-directory: build-${{ matrix.abi }}
         run: |
           patch -p1 -i ../patches/disable_opengl_in_precomp.patch    
 
