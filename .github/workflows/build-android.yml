@@ -114,6 +114,11 @@ jobs:
           cat CMakeCache.txt | grep -i java
           cat CMakeCache.txt | grep -i openexr
 
+      - name: Apply patches Again
+        working-directory: opencv
+        run: |
+          patch -p1 -i ../patches/disable_opengl_in_precomp.patch    
+
       - name: Build with Ninja
         working-directory: build-${{ matrix.abi }}
         run: ninja -j$(nproc)
