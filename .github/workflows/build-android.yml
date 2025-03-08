@@ -73,7 +73,7 @@ jobs:
             -DBUILD_opencv_imgproc=ON \
             -DBUILD_opencv_features2d=ON \
             -DBUILD_opencv_flann=ON \
-            ..
+            ../opencv
 
       - name: Build with Ninja
         working-directory: build-${{ matrix.abi }}
