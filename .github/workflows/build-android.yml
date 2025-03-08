@@ -68,6 +68,7 @@ jobs:
             -DOPENCV_DISABLE_FILESYSTEM_SUPPORT=ON \
             -DOPENCV_EXTRA_FLAGS="-mno-outline-atomics" \
             -DOPENCV_SKIP_ANDROID=ON \
+            -DWITH_OPENCL=OFF \
             -DBUILD_opencv_calib3d=ON \
             -DBUILD_opencv_core=ON \
             -DBUILD_opencv_imgproc=ON \
